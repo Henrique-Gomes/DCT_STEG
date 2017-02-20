@@ -1,8 +1,10 @@
 #include "dct_steg.h"
 #include <stdio.h>
 #include <iostream>
+#include <utility>
 
-using namespace std;
+using std::cout;
+using std::pair;
 
 int main() {
 
@@ -13,12 +15,18 @@ int main() {
 	string	output;
 	string	msg;
 
+	pair<long float, long int> chi; // qui quadrado ; tamanho
+
 	FILE *	infile;
 	FILE *	outfile;
 
 	while (true) {
 
-		cout << "Insira G para gravar ou L para ler" << endl;
+		cout << "Opcoes" << endl;
+		cout << "G: Gravar" << endl;
+		cout << "L: Ler" << endl;
+		cout << "C: Qui-Quadrado" << endl;
+		cout << endl;
 		cin >> msg;
 
 		if ((msg == "L") || (msg == "l")) {
@@ -32,7 +40,7 @@ int main() {
 				}
 			} while (infile == NULL);
 
-			cout << read_steg_message(infile) << endl;
+			cout << "\nMensagem lida:\n\n" << read_steg_message(infile) << endl;
 
 		}
 
@@ -50,7 +58,6 @@ int main() {
 			cin.ignore(); // limpa o buffer
 			cout << "\nInsira a mensagem a ser escondida" << endl;
 			getline(cin, msg);
-			//cin >> msg;
 
 			do {
 				cout << "\nInsira a saida" << endl;
@@ -62,6 +69,24 @@ int main() {
 			} while (outfile == NULL);
 
 			write_steg_message(infile, outfile, msg);
+		}
+
+		else if ((msg == "C") || (msg == "c")) {
+
+			do {
+				cout << "\nInsira a entrada" << endl;
+				cin >> input;
+				errno = 0;
+				if ((infile = fopen(input.c_str(), "rb")) == NULL) {
+					printf("Erro %d ao abrir %s \n", errno, input.c_str());
+				}
+			} while (infile == NULL);
+
+			chi = read_chi(infile);
+
+			cout << "\ntamanho: " << to_string(chi.second) << endl;
+			cout << "qui quadrado: " << to_string(chi.first) << endl;
+
 		}
 		else
 			cout << "\nopcao invalida" << endl;
