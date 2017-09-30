@@ -4,5 +4,6 @@
 !/main.cpp
 !/dct_steg.cpp
 !/dct_steg.h
+!/text_source.h
 !.gitignore
 !README.md
